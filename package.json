@@ -1,0 +1,30 @@
+{
+  "name": "hgvalidator",
+  "version": "1.0.0",
+  "description": "A simple, efficient and effective schema validator",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "test",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dayo4/validator.git"
+  },
+  "keywords": [
+    "validator"
+  ],
+  "author": "Adedayo Adeniyi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dayo4/validator/issues"
+  },
+  "homepage": "https://github.com/dayo4/validator#readme",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
