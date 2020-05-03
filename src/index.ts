@@ -1,31 +1,32 @@
 interface schemaDataInterface {
     fieldName: string // name of the field being validated. Required as reference to the field.
     data: any//this is the data to be valivated.
-    readonly rules: {}
+    rules: {
+        [index: string]: boolean | number | string
+    }
     messages?: {//custom validation messages if provided
-        required?: string
-        string?: string
+        [index: string]: string
     }
 }
 
-interface schemaOptions {
+interface schemaOptions {//possible options to pass to the validate() method as second parameter
     skipSanitize: string[]
 }
 
 interface ruleOptions {
     fieldName: string
-    ruleValue?: any // for rules that require a validation value. Example: min = 20,
+    ruleValue?: string | number | null // for rules that require a validation value. Example->  rules: { min: 20 } //'20' here is the ruleValue,
 }
 
 class HGValidator {
     private readonly defaultRules: string[] = ['required', 'string', 'number', 'email', 'min', 'max', 'equalTo', 'pattern']
-    private errors: object | any = {}
+    private errors: object = {}
 
-    protected log(error) {
+    protected log(error: Error) {
         console.error(error)
     }
 
-    validate(schema: schemaDataInterface[], options?: schemaOptions): boolean | object {
+    validate(schema: schemaDataInterface[], options?: schemaOptions): boolean {
         if (!Array.isArray(schema))
         {
             throw new TypeError('The validation schema is expected to be an array of objects.')
@@ -35,6 +36,7 @@ class HGValidator {
 
         for (const x of schema)
         {
+
             const fieldName = x.fieldName
             const data = () => {
                 if (options)
@@ -93,38 +95,38 @@ class HGValidator {
     get getErrors() {
         return this.errors
     }
-    protected required(data, options: ruleOptions) {
+    protected required(data: any, options: ruleOptions) {
         if (data || data.length > 0 || data !== '')
         {
             return true
         }
         return `${ options.fieldName } is required and cannot be empty.`
     }
-    protected string(data, options: ruleOptions) {
+    protected string(data: any, options: ruleOptions) {
         if (typeof data === 'string')
         {
             return true
         }
         return `${ options.fieldName } is expected to be a string.`
     }
-    protected number(data, options: ruleOptions) {
+    protected number(data: any, options: ruleOptions) {
         if (typeof data === 'number')
         {
             return true
         }
         return `${ options.fieldName } is expected to be a number or integer.`
     }
-    protected email(data, options: ruleOptions) {
+    protected email(data: any, options: ruleOptions) {
         if (data.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/))
         {
             return true
         }
         return `${ options.fieldName } must be a valid email address.`
     }
-    protected min(data, options: ruleOptions) {
+    protected min(data: any, options: ruleOptions) {
         if (typeof Number(options.ruleValue) !== 'number')
         {
-            throw new TypeError(`The value of "MIN" rule in FIELD-(${ options.fieldName }) is expected to be a number.`)
+            throw new TypeError(`The value of "MIN" rule in FIELD '${ options.fieldName }' is expected to be a number.`)
         }
         if (typeof data === 'string' && data.length < options.ruleValue)
         {
@@ -136,10 +138,10 @@ class HGValidator {
         }
         return true
     }
-    protected max(data, options: ruleOptions) {
+    protected max(data: any, options: ruleOptions) {
         if (typeof Number(options.ruleValue) !== 'number')
         {
-            throw new TypeError(`The value of "MAX" rule in FIELD-(${ options.fieldName }) is expected to be a number.`)
+            throw new TypeError(`The value of "MAX" rule in FIELD '${ options.fieldName }' is expected to be a number.`)
         }
         if (typeof data === 'string' && data.length > options.ruleValue)
         {
@@ -151,14 +153,14 @@ class HGValidator {
         }
         return true
     }
-    protected equalTo(data, options: ruleOptions) {
+    protected equalTo(data: any, options: ruleOptions) {
         if (data === options.ruleValue)
         {
             return true
         }
         return `${ options.fieldName } should be equala to ${ options.ruleValue }.`
     }
-    protected pattern(data, options: ruleOptions) {
+    protected pattern(data: any, options: ruleOptions) {
         // if (options.ruleValue != RegExp)
         // {
         //     this.log('The value of "PATTERN" rule is expected to be a Regular Expression (REGEXP)')

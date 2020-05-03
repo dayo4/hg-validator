@@ -1,12 +1,11 @@
 {
   "name": "hgvalidator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple, efficient and effective schema validator",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "test",
-    "prepare": "npm run build"
+    "test": "test"
   },
   "repository": {
     "type": "git",

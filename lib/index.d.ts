@@ -1,10 +1,11 @@
 interface schemaDataInterface {
     fieldName: string;
     data: any;
-    readonly rules: {};
+    rules: {
+        [index: string]: boolean | number | string;
+    };
     messages?: {
-        required?: string;
-        string?: string;
+        [index: string]: string;
     };
 }
 interface schemaOptions {
@@ -12,17 +13,17 @@ interface schemaOptions {
 }
 interface ruleOptions {
     fieldName: string;
-    ruleValue?: any;
+    ruleValue?: string | number | null;
 }
 declare class HGValidator {
     private readonly defaultRules;
     private errors;
-    protected log(error: any): void;
-    validate(schema: schemaDataInterface[], options?: schemaOptions): boolean | object;
+    protected log(error: Error): void;
+    validate(schema: schemaDataInterface[], options?: schemaOptions): boolean;
     sanitize(data: string, option?: {
         strict: boolean;
     }): string;
-    get getErrors(): any;
+    get getErrors(): object;
     protected required(data: any, options: ruleOptions): string | true;
     protected string(data: any, options: ruleOptions): string | true;
     protected number(data: any, options: ruleOptions): string | true;
