@@ -4,6 +4,8 @@ A simple, schema-structured javascript data validator.
 Can be easily used both client side and server side.
 This is created as a generic and independent validation solution for use in any context.
 
+Works in any typescript and javascript project.
+
 # **Installation**
 
 ```javascript
@@ -97,7 +99,7 @@ else {
 	// Example:
 	/*
 		{
-			Title: "Title is required and can not be empty",
+			Title: "Title is required and cannot be empty",
 			Random: "Random's value should not be less than 100",
 		}
 	*/
@@ -123,7 +125,7 @@ else {
 ```
 
 
-## Supported_Rules and corresponding data types.
+## Supported_Rules
 
 ```javascript
 rules: {
@@ -143,5 +145,5 @@ rules: {
 
 
 
-# **disclaimer**
+## **disclaimer**
 Please note that no guarantee of any kind is granted with the use of this code.

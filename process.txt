@@ -4,13 +4,3 @@ tsc --init
 echo "node_modules" >> .gitignore
 
 npm install --save-dev typescript
-
-
-
-
-
-
-
-
-
-   ////////////// "prepare": "npm run build"
