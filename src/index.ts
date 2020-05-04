@@ -31,6 +31,7 @@ class HGValidator {
         {
             throw new TypeError('The validation schema is expected to be an array of objects.')
         }
+
         this.errors = {}
         let failedValidations = 0
 
@@ -41,7 +42,9 @@ class HGValidator {
             const data = () => {
                 if (options)
                 {
-                    if (options.skipSanitize && Array.isArray(options.skipSanitize) && options.skipSanitize.includes(fieldName))
+                    const skippable = options.skipSanitize
+                    //@ts-ignore
+                    if (skippable && Array.isArray(skippable) && skippable.includes(fieldName))
                     {
                         return x.data
                     }
@@ -55,16 +58,23 @@ class HGValidator {
 
             for (const y of Object.keys(rules))
             {
+                //@ts-ignore
                 if (!(this.defaultRules.includes(y)))
                 {
-                    throw new Error('Unknown rule type( ' + y + ' ) detected in schema with field name "' + fieldName + '".')
+                    throw new Error(`Unknown rule type  "${ y }"  detected in schema with field name "${ fieldName }".`)
                 }
                 else if (rules[y])
                 {
-                    const response = this[y](data(), { fieldName, ruleValue: rules[y] })
+                    const response = this[y](
+                        data(),
+                        {
+                            fieldName,
+                            ruleValue: rules[y]
+                        })
+
                     if (response !== true)
                     {
-                        this.log(messages ? messages[y] : response)
+                        //@ts-ignore
                         Object.assign(this.errors, {
                             [fieldName]: messages ? messages[y] : response
                         })
@@ -73,6 +83,7 @@ class HGValidator {
                         break
                     }
                 }
+                return false
 
             }
 
@@ -92,7 +103,7 @@ class HGValidator {
         }
         return data.replace(/(<([^>]+)>)/ig, "").replace(/[\s]+/g, ' ').trim()
     }
-    get getErrors() {
+    getErrors() {
         return this.errors
     }
     protected required(data: any, options: ruleOptions) {
@@ -158,20 +169,16 @@ class HGValidator {
         {
             return true
         }
-        return `${ options.fieldName } should be equala to ${ options.ruleValue }.`
+        return `${ options.fieldName } should be equall to ${ options.ruleValue }.`
     }
     protected pattern(data: any, options: ruleOptions) {
-        // if (options.ruleValue != RegExp)
-        // {
-        //     this.log('The value of "PATTERN" rule is expected to be a Regular Expression (REGEXP)')
-        // }
-        if (data.match(options.ruleValue))
+        const regExp: RegExp = options.ruleValue as any
+        if (regExp.test(data))
         {
             return true
         }
-        return `${ options.fieldName } must match pattern ${ options.ruleValue }.`
+        return `${ options.fieldName } must match this pattern ${ options.ruleValue }.`
     }
-
 }
 const Validator = new HGValidator()
 

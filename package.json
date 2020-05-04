@@ -1,7 +1,7 @@
 {
   "name": "hgvalidator",
   "version": "1.0.1",
-  "description": "A simple, efficient and effective schema validator",
+  "description": "A simple, schema-structured javascript data validator.",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",

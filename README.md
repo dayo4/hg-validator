@@ -1,38 +1,50 @@
-*This readme is incomplete!!*
+## INTRO
+A simple, schema-structured javascript data validator.
+
+Can be easily used both client side and server side.
+This is created as a mini and independent validation solution for use in any context.
 
 # **Installation**
-	npm i hgvalidator --save
 
+```javascript
+	npm i hgvalidator --save
+```
 
 # **Usage**
 
 
-**import the module**
+#### **Import the module**
 
+```javascript
 	import Validator from 'hgvalidator'
+```
 
-##### Data to validate
+#### Some data to validate (These may have been extracted directly from forms or sent as request body to the server)
 
-	let title = 'Some random text'
+```javascript
+	let title = '   '
 	let content = 'Some long wysiwyg content'
-
-##### variable to store returned errors.
-
-let validationErrors = null
+	let username = user123
+	let random = 78
 
 
-##### Every validation requires a SCHEMA which must be an array of objects like in the example below.
+	// A variable to store the validation errors, if any..
+	let validationErrors = null
+```
+
+#### Every validation requires a SCHEMA which must be an array of objects like in the example below.
+
+```javascript
 	const schema = [
 		{
-			fieldName: 'Title',
-			data: title,
+			fieldName: 'Title', //Required as custom reference to the validated field.
+			data: title,	//The data to validate
 			rules: {
 				required: true,
 				string: true,
-				min: 10,
-				max: 200
+				max: 200	// The min/max rules work for both strings (returns characters length), and numbers (returns digit size).
 			},
-			message: {
+			messages: { //Add some custom validation messages if necessary.
 				max: 'Title should not be more than 200 characters'
 			}
 		},
@@ -42,16 +54,94 @@ let validationErrors = null
 			rules: {
 				required: true,
 			},
+		},
+		{
+			fieldName: 'Username',
+			data: username,
+			rules: {
+				required: true,
+				pattern: /^([a-zA-Z]{4,})([0-9])*$/
+			},
+		},
+		{
+			fieldName: 'Random',
+			data: random,
+			rules: {
+				required: true,
+				min: 100
+			},
 		}
 	]
+```
 
-//validate the data
-const validation = Validator.validate(schema, { skipSanitize: ['Content'] })
+**[See all default supported validation rules](#Supported_Rules)**
 
-if(validation) {
-    console.log('success')
-    // preceed with stuffs
-}
-else {
-    validationErrors = Validator.getErrors
-}
+#### **Validate the data**
+
+```javascript
+	const validation = Validator.validate(schema, { skipSanitize: ['Content'] })
+
+		/*	The validator sanitizes all data by default. That is, strips all html 		tags and trims all extra spaces from the data.
+
+			The "skipSanitize" option prevents sanitization of the field names listed in the array. In this case, the post content field.
+		*/
+
+	if(validation) {
+		console.log('success')
+		// preceed with other stuffs
+	}
+	else {
+		validationErrors = Validator.getErrors()
+
+		// Validator.getErrors() returns and object..
+		// Example:
+		/*
+			{
+				Title: "Title is required and can not be empty",
+				Random: "Random's value should not be less than 100",
+			}
+		*/
+
+		//use any
+	}
+```
+
+#### **Then in the html (if validating a form)**
+```html
+	<input id="title" name="title" />
+	<span>{{ titleErrorMsg }}</span>
+	...
+	...
+	...
+	...
+
+	<script>
+	...
+	...
+		document.querySelector('#title').innerText = validationErrors['Title']
+	</script>
+```
+
+
+## Supported_Rules and corresponding data types.
+
+```javascript
+	rules: {
+		required: boolean
+		string: boolean
+		email: boolean
+		number: boolean
+		min: number
+		max: number
+		equalTo: any
+		pattern: RegExp
+	}
+```
+
+
+
+
+
+
+# **disclaimer**
+Please note that no guarantee of any kind is granted with the use of this code.
