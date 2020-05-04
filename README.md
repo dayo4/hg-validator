@@ -1,7 +1,7 @@
 *This readme is incomplete!!*
 
 # **Installation**
-<addr>npm i hgvalidator --save<addr>
+	npm i hgvalidator --save
 
 
 # **Usage**
@@ -9,39 +9,39 @@
 
 
 **import the module**
-<addr>import Validator from 'hgvalidator'<addr>
+	import Validator from 'hgvalidator'
 
 //Data to validate
-let title = 'Some random text'
-let content = 'Some long wysiwyg content'
+	let title = 'Some random text'
+	let content = 'Some long wysiwyg content'
 
 //variable to store returned errors.
 let validationErrors = null
 
 
 //Every validation requires a SCHEMA which must be an array of objects like in the example below.
-const schema = [
-	{
-		fieldName: 'Title',
-		data: title,
-		rules: {
-			required: true,
-			string: true,
-			min: 10,
-			max: 200
+	const schema = [
+		{
+			fieldName: 'Title',
+			data: title,
+			rules: {
+				required: true,
+				string: true,
+				min: 10,
+				max: 200
+			},
+			message: {
+				max: 'Title should not be more than 200 characters'
+			}
 		},
-        message: {
-            max: 'Title should not be more than 200 characters'
-        }
-	},
-	{
-		fieldName: 'Content',
-		data: content,
-		rules: {
-			required: true,
-		},
-	}
-]
+		{
+			fieldName: 'Content',
+			data: content,
+			rules: {
+				required: true,
+			},
+		}
+	]
 
 //validate the data
 const validation = Validator.validate(schema, { skipSanitize: ['Content'] })
