@@ -1,14 +1,15 @@
 *This readme is incomplete!!*
 
 # **Installation**
-npm i hgvalidator --save
+<addr>npm i hgvalidator --save<addr>
 
 
 # **Usage**
 ##### MAIN VALIDATION EXAMPLES
-<addr>
-//import the module
-import Validator from 'hgvalidator'
+
+
+**import the module**
+<addr>import Validator from 'hgvalidator'<addr>
 
 //Data to validate
 let title = 'Some random text'
@@ -52,4 +53,3 @@ if(validation) {
 else {
     validationErrors = Validator.getErrors
 }
-<addr>
