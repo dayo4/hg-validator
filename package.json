@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "test"
+    "test": "test",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
