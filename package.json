@@ -1,6 +1,6 @@
 {
   "name": "hgvalidator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple, schema-structured javascript data validator.",
   "main": "lib/index.js",
   "scripts": {
