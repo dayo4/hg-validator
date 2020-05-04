@@ -5,21 +5,23 @@
 
 
 # **Usage**
-##### MAIN VALIDATION EXAMPLES
 
 
 **import the module**
+
 	import Validator from 'hgvalidator'
 
-//Data to validate
+##### Data to validate
+
 	let title = 'Some random text'
 	let content = 'Some long wysiwyg content'
 
-//variable to store returned errors.
+##### variable to store returned errors.
+
 let validationErrors = null
 
 
-//Every validation requires a SCHEMA which must be an array of objects like in the example below.
+##### Every validation requires a SCHEMA which must be an array of objects like in the example below.
 	const schema = [
 		{
 			fieldName: 'Title',
