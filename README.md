@@ -124,6 +124,23 @@ else {
 </script>
 ```
 
+#### **Available utility methods**
+```javascript
+Validator.validate(schema, options = {}) //This has been explained above
+
+
+Validator.sanitize(data, options = {}) // for personally stripping out all html tags and trimming empty spaces in data.
+/*Sanitize options */
+const options = {
+	strict: false // defaults to 'true'.
+			/* 	If false, only '<script>' tags will be removed from the data, other tags will be left.
+				And only beginning and ending whitespaces will be removed. */
+}
+
+
+Validator.getErrors() // returns validation errors
+```
+
 
 ## Supported_Rules
 

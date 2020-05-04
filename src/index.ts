@@ -20,11 +20,9 @@ interface ruleOptions {
 
 class HGValidator {
     private readonly defaultRules: string[] = ['required', 'string', 'number', 'email', 'min', 'max', 'equalTo', 'pattern']
+
     private errors: object = {}
 
-    protected log(error: Error) {
-        console.error(error)
-    }
 
     validate(schema: schemaDataInterface[], options?: schemaOptions): boolean {
         if (!Array.isArray(schema))
@@ -90,10 +88,8 @@ class HGValidator {
         }
         if (failedValidations === 0)
         {
-            console.log('all valid')
             return true
         }
-        console.log('invalid')
         return false
     }
     sanitize(data: string, option?: { strict: boolean }) {
