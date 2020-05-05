@@ -83,7 +83,7 @@ const schema = [
 ```javascript
 const validation = Validator.validate(schema, { skipSanitize: ['Content'] })
 
-	/*	The validator sanitizes all data by default. That is, strips all html tags and trims all extra spaces from the data.
+	/*	The validator sanitizes all data by default. That is, strips all html tags and trims all extra spaces from the data before validation.
 
 		The "skipSanitize" option prevents sanitization of the field names listed in the array. In this case, the post content field.
 	*/

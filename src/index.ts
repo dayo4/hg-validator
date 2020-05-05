@@ -27,70 +27,95 @@ class HGValidator {
     validate(schema: schemaDataInterface[], options?: schemaOptions): boolean {
         if (!Array.isArray(schema))
         {
-            throw new TypeError('The validation schema is expected to be an array of objects.')
+            console.error('The validation schema is expected to be an array of objects.')
+            return
         }
-
-        this.errors = {}
-        let failedValidations = 0
-
-        for (const x of schema)
+        else
         {
+            this.errors = {}
+            let failedValidations = 0
 
-            const fieldName = x.fieldName
-            const data = () => {
-                if (options)
-                {
-                    const skippable = options.skipSanitize
-                    //@ts-ignore
-                    if (skippable && Array.isArray(skippable) && skippable.includes(fieldName))
-                    {
-                        return x.data
-                    }
-                    return this.sanitize(x.data)
-                }
-                return this.sanitize(x.data)
-
-            }
-            const rules = x.rules
-            const messages = x.messages
-
-            for (const y of Object.keys(rules))
+            for (const x of schema)
             {
-                //@ts-ignore
-                if (!(this.defaultRules.includes(y)))
+                if (!x.rules || !x.data || !x.fieldName || typeof x !== 'object' || x === null)
                 {
-                    throw new Error(`Unknown rule type  "${ y }"  detected in schema with field name "${ fieldName }".`)
+                    console.error(`Validation Schema is invalid or missing required entries.`)
+                    return
                 }
-                else if (rules[y])
-                {
-                    const response = this[y](
-                        data(),
-                        {
-                            fieldName,
-                            ruleValue: rules[y]
-                        })
 
-                    if (response !== true)
+                // function ifExists(item: any) {
+                //     if (typeof item !== 'undefined' && item !== null)
+                //     {
+                //         return item
+                //     }
+                //     else
+                //     {
+                //         console.error(`One or more of the required entries ["fieldName", "data", "rules"] in schema is undefined or it's value is invalid.`)
+                //         return
+                //     }
+                // }
+
+                const fieldName = x.fieldName
+                const data = () => {
+                    const data = x.data
+                    if (options)
                     {
+                        const skippable = options.skipSanitize
                         //@ts-ignore
-                        Object.assign(this.errors, {
-                            [fieldName]: messages ? messages[y] : response
-                        })
+                        if (skippable && Array.isArray(skippable) && skippable.includes(fieldName))
+                        {
+                            return data
+                        }
+                        return this.sanitize(data)
+                    }
+                    return this.sanitize(data)
 
-                        failedValidations++
-                        break
+                }
+                const rules = x.rules
+                const messages = x.messages
+
+                for (const y of Object.keys(rules))
+                {
+                    //@ts-ignore
+                    if (!(this.defaultRules.includes(y)))
+                    {
+                        console.error(`Unknown rule type  "${ y }"  detected in schema with field name "${ fieldName }".`)
+                        return
+                    }
+                    else if (!rules[y] || rules[y] === null)
+                    {
+                        console.error(`Invalid value assigned to rule "${ y }" in schema with field name "${ fieldName }" .`)
+                        return
+                    }
+                    else
+                    {
+                        const response = this[y](
+                            data(),
+                            {
+                                fieldName,
+                                ruleValue: rules[y]
+                            })
+
+                        if (response !== true)
+                        {
+                            //@ts-ignore
+                            Object.assign(this.errors, {
+                                [fieldName]: messages ? messages[y] : response
+                            })
+
+                            failedValidations++
+                            break
+                        }
                     }
                 }
-                return false
 
             }
-
+            if (failedValidations === 0)
+            {
+                return true
+            }
+            return false
         }
-        if (failedValidations === 0)
-        {
-            return true
-        }
-        return false
     }
     sanitize(data: string, option?: { strict: boolean }) {
         if (option && option.strict == false)
@@ -131,9 +156,9 @@ class HGValidator {
         return `${ options.fieldName } must be a valid email address.`
     }
     protected min(data: any, options: ruleOptions) {
-        if (typeof Number(options.ruleValue) !== 'number')
+        if (typeof options.ruleValue !== 'number')
         {
-            throw new TypeError(`The value of "MIN" rule in FIELD '${ options.fieldName }' is expected to be a number.`)
+            console.error(`The value of "MIN" rule in FIELD '${ options.fieldName }' is expected to be a number.`)
         }
         if (typeof data === 'string' && data.length < options.ruleValue)
         {
@@ -146,9 +171,9 @@ class HGValidator {
         return true
     }
     protected max(data: any, options: ruleOptions) {
-        if (typeof Number(options.ruleValue) !== 'number')
+        if (typeof options.ruleValue !== 'number')
         {
-            throw new TypeError(`The value of "MAX" rule in FIELD '${ options.fieldName }' is expected to be a number.`)
+            console.error(`The value of "MAX" rule in FIELD '${ options.fieldName }' is expected to be a number.`)
         }
         if (typeof data === 'string' && data.length > options.ruleValue)
         {

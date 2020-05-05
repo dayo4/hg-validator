@@ -18,12 +18,11 @@ interface ruleOptions {
 declare class HGValidator {
     private readonly defaultRules;
     private errors;
-    protected log(error: Error): void;
     validate(schema: schemaDataInterface[], options?: schemaOptions): boolean;
     sanitize(data: string, option?: {
         strict: boolean;
     }): string;
-    get getErrors(): object;
+    getErrors(): object;
     protected required(data: any, options: ruleOptions): string | true;
     protected string(data: any, options: ruleOptions): string | true;
     protected number(data: any, options: ruleOptions): string | true;
