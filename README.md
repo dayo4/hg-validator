@@ -46,7 +46,7 @@ const schema = [
 			string: true,
 			max: 200	// The min/max rules work for both strings (returns characters length), and numbers (returns digit size).
 		},
-		messages: { //Add some custom validation messages if necessary.
+		messages: { //Optional. Add some custom validation messages if necessary.
 			max: 'Title should not be more than 200 characters'
 		}
 	},
@@ -64,6 +64,9 @@ const schema = [
 			required: true,
 			pattern: /^([a-zA-Z]{4,})([0-9])*$/
 		},
+		message:{
+			pattern: 'blah blah blah'
+		}
 	},
 	{
 		fieldName: 'Random',
@@ -81,37 +84,37 @@ const schema = [
 #### **Validate the data**
 
 ```javascript
-const validation = Validator.validate(schema, { skipSanitize: ['Content'] })
+const validated = Validator.validate(schema, { skip: ['Content'] })
 
-	/*	The validator sanitizes all data by default. That is, strips all html tags and trims all extra spaces from the data before validation.
-
-		The "skipSanitize" option prevents sanitization of the field names listed in the array. In this case, the post content field.
+	/*	The "skip" option prevents validation of the fields names listed in the array. This is Useful when using same schema for multiple validations
 	*/
 
-if(validation) {
+if(validated) {
 	console.log('success')
 	// preceed with other stuffs
 }
 else {
 	validationErrors = Validator.getErrors()
 
-	// Validator.getErrors() returns an object..
-	// Example:
-	/*
+	// Validator.getErrors() returns an object (contaning the first error of each validated field) by default..
+	// Result:
 		{
 			Title: "Title is required and cannot be empty",
-			Random: "Random's value should not be less than 100",
+			Random: "Random value should not be less than 100",
 		}
-	*/
 
-	//use any
+	//If you'd like to get back only one error, use the {"format:'single'}" option.
+	validationErrors = Validator.getErrors({format: 'single'})
+		// Result:
+		"Title is required and cannot be empty"
+
 }
 ```
 
 #### **Then in the html (if validating a form)**
 ```html
 <input id="title" name="title" />
-<span>{{ titleErrorMsg }}</span>
+<span id="titleErrorMsg">{{ titleErrorMsg }}</span>
 ...
 ...
 ...
@@ -120,25 +123,25 @@ else {
 <script>
 ...
 ...
-	document.querySelector('#title').innerText = validationErrors['Title']
+	document.querySelector('#titleErrorMsg').innerText = validationErrors['Title']
 </script>
 ```
 
 #### **Available utility methods**
 ```javascript
-Validator.validate(schema, options = {}) //This has been explained above
+- Validator.validate(schema, options = {}) //This has been explained above
 
 
-Validator.sanitize(data, options = {}) // for personally stripping out all html tags and trimming empty spaces in data.
-/*Sanitize options */
-const options = {
-	strict: false // defaults to 'true'.
-			/* 	If false, only '<script>' tags will be removed from the data, other tags will be left.
-				And only beginning and ending whitespaces will be removed. */
-}
+- Validator.sanitize(data, options = {}) // for personally stripping out all html tags and trimming empty spaces in data.
+		/*Sanitize options */
+		const options = {
+			strict: false // defaults to 'true'.
+					/* 	If false, only '<script>' tags will be removed from the data, other tags will be left.
+						And only beginning and ending whitespaces will be removed. */
+		}
 
 
-Validator.getErrors() // returns validation errors
+- Validator.getErrors() // returns validation errors
 ```
 
 
