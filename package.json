@@ -22,9 +22,10 @@
   },
   "homepage": "https://github.com/dayo4/validator#readme",
   "devDependencies": {
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   },
   "files": [
     "lib/**/*"
-  ]
+  ],
+  "dependencies": {}
 }

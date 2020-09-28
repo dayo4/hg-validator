@@ -19,6 +19,6 @@ export function isEmptyObj(obj: any) {
     return isObj(obj) && Object.keys(obj).length <= 0
 }
 
-export function hasIt(arr: any[], item: any) {
+export function hasProp(arr: any[], item: any) {
     return arr.some((x) => x === item)
 }
