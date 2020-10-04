@@ -135,7 +135,7 @@ export default class HGValidator {
             {
                 return data.replace(/(<([script^>]+)>)/ig, "").trim()
             }
-            return data.replace(/(<([^>]+)>)/ig, "").replace(/[\s]+/g, ' ').trim()
+            return data.replace(/(<([^>]+)>)/ig, "").replace(/\s{2,}/g, ' ').trim()
         }
     }
 
